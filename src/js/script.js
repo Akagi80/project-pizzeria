@@ -92,7 +92,8 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      // console.log('thisProductFromInputs: ', thisProduct.formInputs);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      //console.log('thisProductFromInputs: ', thisProduct.formInputs);
     }
 
     initOrderFrom() {
@@ -132,18 +133,28 @@
 
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
+        // console.log(paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log(optionId, option);
+          // console.log(optionId, option);
+
+          // finde all images    ----   8.7
+          //console.log('paramId, optionId: ', paramId, optionId);
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          // console.log('optionImage: ', optionImage);
 
           // check if there is param with a name of paramId in formData and if it includes optionId
           // czy dana opcja (optionId) danej kategorii (paramId) jest wybrana w formularzu (formData)
           if(formData[paramId] && formData[paramId].includes(optionId)) {
-            console.log(formData[paramId]);
+            // console.log(formData[paramId]);
+
+            // add extra images - not remove yet...    ----     8.7
+            if(optionImage) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            }
 
             // check if the option is not default - czy opcja NIE posiada default
             if(!option.default) {
@@ -156,6 +167,10 @@
 
             // reduce price variable - jeżeli opcja JEST default i zostaje odznaczona obniza cenę
             price = price - option.price;
+
+            // remove uncheck images      ----     8.7
+            optionImage.classList.remove(classNames.menuProduct.imageVisible);
+          } else if (optionImage) {optionImage.classList.remove(classNames.menuProduct.imageVisible);
           }
         }
 
@@ -211,11 +226,11 @@
 
     init: function() { // I Pierwsza uruchamiana metoda która odpala initData i initMenu
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
+      // console.log('*** App starting ***');
+      // console.log('thisApp:', thisApp);
+      // console.log('classNames:', classNames);
+      // console.log('settings:', settings);
+      // console.log('templates:', templates);
 
       thisApp.initData();
       thisApp.initMenu();
