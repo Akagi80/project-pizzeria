@@ -122,7 +122,7 @@
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      // console.log('formData', formData);
 
       // set price to default price
       let price = thisProduct.data.price;
@@ -135,33 +135,37 @@
         console.log(paramId, param);
 
         // for every option in this category
-      for(let optionId in param.options) {
-        // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
-        const option = param.options[optionId];
-        console.log(optionId, option);
+        for(let optionId in param.options) {
+          // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
+          const option = param.options[optionId];
+          console.log(optionId, option);
 
-        // check if there is param with a name of paramId in formData and if it includes optionId
-        if(formData[paramId] && formData[paramId].includes(optionId)) {
+          // check if there is param with a name of paramId in formData and if it includes optionId
+          // czy dana opcja (optionId) danej kategorii (paramId) jest wybrana w formularzu (formData)
+          if(formData[paramId] && formData[paramId].includes(optionId)) {
+            console.log(formData[paramId]);
 
-        // check if the option is not default
-          if(????) {
+            // check if the option is not default - czy opcja NIE posiada default
+            if(option.default != true) {
 
-            // add option price to price variable
-          }
-        } else {
+              // add option price to price variable - jeżeli opcja jest oznaczona i NIE posiada default podnosi cenę
+              price = price + option.price;
+            }
+          } else {
+            // check if the option is default - czy opcja JEST default
+            if(option.default) {
 
-          // check if the option is default
-          if(????) {
-            // reduce price variable
+              // reduce price variable - jeżeli opcja JEST default i zostaje odznaczona obniza cenę
+              price = price - option.price;
+              //  npm }
+            }
           }
         }
 
-      }
-
         // update calculated price in the HTML
         thisProduct.priceElem.innerHTML = price;
-      }
 
+      }
     }
 
     initAccordion() {
