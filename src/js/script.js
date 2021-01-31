@@ -162,6 +162,7 @@
               // add option price to price variable - jeżeli opcja jest oznaczona i NIE posiada default podnosi cenę
               price = price + option.price;
             }
+
           } else if(option.default) {
             // check if the option is default - czy opcja JEST default
 
@@ -169,8 +170,12 @@
             price = price - option.price;
 
             // remove uncheck images      ----     8.7
+            if(optionImage) {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
+
+          }  else if(optionImage) {
             optionImage.classList.remove(classNames.menuProduct.imageVisible);
-          } else if (optionImage) {optionImage.classList.remove(classNames.menuProduct.imageVisible);
           }
         }
 
