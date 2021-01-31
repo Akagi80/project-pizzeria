@@ -146,25 +146,21 @@
             console.log(formData[paramId]);
 
             // check if the option is not default - czy opcja NIE posiada default
-            if(option.default != true) {
+            if(!option.default) {
 
               // add option price to price variable - jeżeli opcja jest oznaczona i NIE posiada default podnosi cenę
               price = price + option.price;
             }
-          } else {
+          } else if(option.default) {
             // check if the option is default - czy opcja JEST default
-            if(option.default) {
 
-              // reduce price variable - jeżeli opcja JEST default i zostaje odznaczona obniza cenę
-              price = price - option.price;
-              //  npm }
-            }
+            // reduce price variable - jeżeli opcja JEST default i zostaje odznaczona obniza cenę
+            price = price - option.price;
           }
         }
 
         // update calculated price in the HTML
         thisProduct.priceElem.innerHTML = price;
-
       }
     }
 
