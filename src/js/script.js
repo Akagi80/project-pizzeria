@@ -246,11 +246,10 @@
       const newValue = parseInt(value); // presentInt(value) konwertuje liczkę zapisaną jako tekst (input tak ZAWSZE zapisuje) np '8' na właściwie zapisaną 8
 
       /* TODO: Add validation */
-      if(thisWidget.value !== newValue && !isNaN(newValue)) { //thisWidget.value zmieni się tylko wtedy, jeśli nowa wpisana w input wartość będzie inna niż obecna. !isNaN sprawdza czy newValue JEST liczbą,
-        thisWidget.value == newValue;
+      if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) { //thisWidget.value zmieni się tylko wtedy, jeśli nowa wpisana w input wartość będzie inna niż obecna. !isNaN sprawdza czy newValue JEST liczbą,
+        thisWidget.value = newValue;
       }
 
-      thisWidget.value = newValue;
       thisWidget.input.value = thisWidget.value;
     }
 
