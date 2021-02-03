@@ -43,8 +43,8 @@
   const settings = {
     amountWidget: {
       defaultValue: 1,
-      defaultMin: 1,
-      defaultMax: 9,
+      defaultMin: 0,
+      defaultMax: 10,
     }
   };
 
@@ -181,7 +181,10 @@
           }
         }
 
-        // update calculated price in the HTML
+        /* multiply price by amount  ----  mnożymy cenę za wybrany produkt przez liczbę sztuk */
+        price *= thisProduct.amountWidget.value;
+
+        // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
         thisProduct.priceElem.innerHTML = price;
       }
     }
@@ -216,6 +219,11 @@
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+
+      // nasłuchiwacz elementu: --thisProduct.amountWidgetElem-- na zdarzenie: --update-- na anonimową funkcję: --thisProduct.processOrder()--
+      thisProduct.amountWidgetElem.addEventListener('updated', function() {
+        thisProduct.processOrder();
+      });
     }
   }
 
@@ -238,6 +246,7 @@
       thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
       thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+      thisWidget.value = settings.amountWidget.defaultValue; // stąd pobieramy domyślną ilość produktów 
     }
 
     setValue(value) {
@@ -251,6 +260,7 @@
       }
 
       thisWidget.input.value = thisWidget.value;
+      thisWidget.announce();
     }
 
     initActions() {
@@ -269,6 +279,13 @@
         event.preventDefault();
         thisWidget.setValue(thisWidget.value + 1);
       });
+    }
+
+    announce() {
+      const thisWidget = this;
+
+      const event = new Event('updated'); // stworony Event nazywamy updated
+      thisWidget.element.dispatchEvent(event);
     }
   }
 
