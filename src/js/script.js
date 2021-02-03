@@ -129,6 +129,7 @@
 
       // set price to default price
       let price = thisProduct.data.price;
+      //console.log(thisProduct.data.price);
 
       // for every category (param)...
       for(let paramId in thisProduct.data.params) {
@@ -181,12 +182,14 @@
           }
         }
 
-        /* multiply price by amount  ----  mnożymy cenę za wybrany produkt przez liczbę sztuk */
-        price *= thisProduct.amountWidget.value;
-
-        // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
-        thisProduct.priceElem.innerHTML = price;
       }
+
+      /* multiply price by amount  ----  mnożymy cenę za wybrany produkt przez liczbę sztuk */
+      price *= thisProduct.amountWidget.value;
+      //console.log(thisProduct.amountWidget.value);
+      
+      // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
+      thisProduct.priceElem.innerHTML = price;
     }
 
     initAccordion() {
@@ -246,7 +249,7 @@
       thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
       thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
-      thisWidget.value = settings.amountWidget.defaultValue; // stąd pobieramy domyślną ilość produktów 
+      thisWidget.value = settings.amountWidget.defaultValue; // stąd pobieramy domyślną ilość produktów   -- 9.1
     }
 
     setValue(value) {
@@ -254,8 +257,11 @@
 
       const newValue = parseInt(value); // presentInt(value) konwertuje liczkę zapisaną jako tekst (input tak ZAWSZE zapisuje) np '8' na właściwie zapisaną 8
 
+      console.log(thisWidget, value);
+
       /* TODO: Add validation */
       if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) { //thisWidget.value zmieni się tylko wtedy, jeśli nowa wpisana w input wartość będzie inna niż obecna. !isNaN sprawdza czy newValue JEST liczbą,
+
         thisWidget.value = newValue;
       }
 
