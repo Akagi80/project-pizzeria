@@ -132,7 +132,7 @@
       thisProduct.dom.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.dom.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
       thisProduct.dom.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
-      //console.log('thisProductdomFromInputs: ', thisProduct.dom.formInputs);
+      //console.log('thisProductFromInputs: ', thisProduct.formInputs);
     }
 
     initOrderFrom() {
@@ -161,7 +161,7 @@
       const thisProduct = this;
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
-      const formData = utils.serializeFormToObject(thisProduct.form);
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
       // console.log('formData', formData);
 
       // set price to default price
