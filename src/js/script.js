@@ -123,31 +123,33 @@
     getElements() {
       const thisProduct = this;
 
-      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
-      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
-      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
-      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
-      //console.log('thisProductFromInputs: ', thisProduct.formInputs);
+      thisProduct.dom = {};
+
+      thisProduct.dom.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      thisProduct.dom.form = thisProduct.element.querySelector(select.menuProduct.form);
+      thisProduct.dom.formInputs = thisProduct.dom.form.querySelectorAll(select.all.formInputs);
+      thisProduct.dom.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      thisProduct.dom.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.dom.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.dom.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      //console.log('thisProductdomFromInputs: ', thisProduct.dom.formInputs);
     }
 
     initOrderFrom() {
       const thisProduct = this;
 
-      thisProduct.form.addEventListener('submit', function(event){
+      thisProduct.dom.form.addEventListener('submit', function(event){
         event.preventDefault();
         thisProduct.processOrder();
       });
 
-      for(let input of thisProduct.formInputs){
+      for(let input of thisProduct.dom.formInputs){
         input.addEventListener('change', function(){
           thisProduct.processOrder();
         });
       }
 
-      thisProduct.cartButton.addEventListener('click', function(event){
+      thisProduct.dom.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
       });
@@ -181,7 +183,7 @@
 
           // finde all images    ----   8.7
           //console.log('paramId, optionId: ', paramId, optionId);
-          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          const optionImage = thisProduct.dom.imageWrapper.querySelector('.' + paramId + '-' + optionId);
           // console.log('optionImage: ', optionImage);
 
           // check if there is param with a name of paramId in formData and if it includes optionId
@@ -224,7 +226,7 @@
       //console.log(thisProduct.amountWidget.value);
 
       // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
-      thisProduct.priceElem.innerHTML = price;
+      thisProduct.dom.priceElem.innerHTML = price;
     }
 
     initAccordion() {
@@ -235,7 +237,7 @@
 
       /* START: add event listener to clickable trigger on event click */
       // clickableTrigger.addEventListener('click', function(event) { --- mod. 8.6 skraca zapis dzięki getElements
-      thisProduct.accordionTrigger.addEventListener('click', function(event) {
+      thisProduct.dom.accordionTrigger.addEventListener('click', function(event) {
 
         /* prevent default action for event */
         event.preventDefault();
@@ -256,10 +258,10 @@
     initAmountWidget() {
       const thisProduct = this;
 
-      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
 
-      // nasłuchiwacz elementu: --thisProduct.amountWidgetElem-- na zdarzenie: --update-- na anonimową funkcję: --thisProduct.processOrder()--
-      thisProduct.amountWidgetElem.addEventListener('updated', function() {
+      // nasłuchiwacz elementu: --thisProduct.dom.amountWidgetElem-- na zdarzenie: --update-- na anonimową funkcję: --thisProduct.processOrder()--
+      thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
         thisProduct.processOrder();
       });
     }
@@ -327,6 +329,26 @@
 
       const event = new Event('updated'); // stworony Event nazywamy updated
       thisWidget.element.dispatchEvent(event);
+    }
+  }
+
+  class Cart {
+    constructor(element) {
+      const thisCard = this;
+
+      thisCard.products = [];
+
+      thisCard.getElements(element);
+
+      console.log('new Card: ', thisCard);
+    }
+
+    getElements(element) {
+      const thisCard = this;
+
+      thisCard.dom = {};
+
+      thisCard.dom.wrapper = element;
     }
   }
 
