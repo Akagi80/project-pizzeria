@@ -152,6 +152,7 @@
       thisProduct.dom.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
 
       // console.log('initOrderFrom: ', this.initOrderFrom);
@@ -221,12 +222,16 @@
 
       }
 
+      thisProduct.priceSingle = price;  // --- 9.4 ---
+
       /* multiply price by amount  ----  mnożymy cenę za wybrany produkt przez liczbę sztuk */
       price *= thisProduct.amountWidget.value;
       //console.log(thisProduct.amountWidget.value);
 
+      thisProduct.price = price;
+
       // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
-      thisProduct.dom.priceElem.innerHTML = price;
+      thisProduct.dom.priceElem.innerHTML = price;  //  --- 9.4 ---
     }
 
     initAccordion() {
@@ -264,6 +269,28 @@
       thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
         thisProduct.processOrder();
       });
+    }
+
+    addToCart() {
+      const thisProduct = this;
+
+      app.cart.add(thisProduct);
+    }
+
+    prepareCartProduct() {
+      const thisProduct = this;
+
+      const productSummary = {};
+
+      productSummary.id = thisProduct.id;
+      productSummary.name = thisProduct.data.name;
+      productSummary.amount = thisProduct.amountWidget.value;
+      productSummary.priceSingle = thisProduct.priceSingle;
+      productSummary.price = thisProduct.price;
+
+      productSummary.params = {};
+
+      return productSummary;
     }
   }
 
@@ -360,6 +387,12 @@
         event.preventDefault();
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
+    }
+
+    add(menuProduct) {
+      // const thisCart = this;
+
+      console.log('adding product', menuProduct);
     }
   }
 
