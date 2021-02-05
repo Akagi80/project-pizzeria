@@ -228,10 +228,10 @@
       price *= thisProduct.amountWidget.value;
       //console.log(thisProduct.amountWidget.value);
 
-      thisProduct.price = price;
+      thisProduct.price = price;  //  --- 9.4 ---
 
       // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
-      thisProduct.dom.priceElem.innerHTML = price;  //  --- 9.4 ---
+      thisProduct.dom.priceElem.innerHTML = price;
     }
 
     initAccordion() {
@@ -274,7 +274,7 @@
     addToCart() {
       const thisProduct = this;
 
-      app.cart.add(thisProduct);
+      app.cart.add(thisProduct.prepareCartProduct());
     }
 
     prepareCartProduct() {
