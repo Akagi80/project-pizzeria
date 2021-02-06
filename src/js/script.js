@@ -284,19 +284,19 @@
 
       productSummary.id = thisProduct.id;
       productSummary.name = thisProduct.data.name;
-      productSummary.params = thisProduct.prepareCartProductParams();
       productSummary.amount = thisProduct.amountWidget.value;
       productSummary.priceSingle = thisProduct.priceSingle;
-      productSummary.price = thisProduct.price;
+      productSummary.price = productSummary.amount * productSummary.priceSingle;
+      productSummary.params = thisProduct.prepareCartProductParams();
 
-
+      console.log('productSummary.params: ', productSummary.params);
       return productSummary;
     }
 
     prepareCartProductParams() {
       const thisProduct = this;
 
-      const formData = utils.serializeFormToObject(thisProduct.form);
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
       const params = {};
 
       // for very category (param)
@@ -305,7 +305,7 @@
 
         // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
         params[paramId] = {
-          name: param.label,
+          label: param.label,
           options: {}
         };
 
@@ -318,6 +318,7 @@
             // option is selected!
             params[paramId].options[optionId] = option.label;
           }
+          console.log('optionSelected: ', optionSelected);
         }
       }
 
