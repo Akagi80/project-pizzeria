@@ -174,13 +174,13 @@
 
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        // console.log(paramId, param);
+        console.log('param: ',paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          // console.log(optionId, option);
+          console.log('option: ', optionId, option);
 
           // finde all images    ----   8.7
           //console.log('paramId, optionId: ', paramId, optionId);
@@ -228,7 +228,7 @@
       price *= thisProduct.amountWidget.value;
       //console.log(thisProduct.amountWidget.value);
 
-      thisProduct.price = price;  //  --- 9.4 ---
+      //thisProduct.price = price;  //  --- 9.4 ---
 
       // update calculated price in the HTML ---- ostateczne wyświetlenie ceny pod produktem
       thisProduct.dom.priceElem.innerHTML = price;
@@ -284,11 +284,11 @@
 
       productSummary.id = thisProduct.id;
       productSummary.name = thisProduct.data.name;
+      productSummary.params = thisProduct.prepareCartProductParams();
       productSummary.amount = thisProduct.amountWidget.value;
       productSummary.priceSingle = thisProduct.priceSingle;
       productSummary.price = thisProduct.price;
 
-      productSummary.params = {};
 
       return productSummary;
     }
@@ -307,7 +307,7 @@
         params[paramId] = {
           name: param.label,
           options: {}
-        }
+        };
 
         // for every option in this category
         for(let optionId in param.options) {
@@ -316,8 +316,7 @@
 
           if(optionSelected) {
             // option is selected!
-            params[paramId].options[optionId] = param.option[optionId].label;
-            //console.log('param.option[optionId].label: ', param.option[optionId].label);
+            params[paramId].options[optionId] = option.label;
           }
         }
       }
@@ -334,8 +333,8 @@
       thisWidget.initActions();
       thisWidget.setValue(thisWidget.input.value);
 
-      console.log('AmountWigdet: ', thisWidget);
-      console.log('constructor arguments: ', element);
+      //console.log('AmountWigdet: ', thisWidget);
+      //console.log('constructor arguments: ', element);
     }
 
     getElements(element) {
@@ -353,7 +352,7 @@
 
       const newValue = parseInt(value); // presentInt(value) konwertuje liczkę zapisaną jako tekst (input tak ZAWSZE zapisuje) np '8' na właściwie zapisaną 8
 
-      console.log(thisWidget, value);
+      //console.log(thisWidget, value);
 
       /* TODO: Add validation */
       if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) { //thisWidget.value zmieni się tylko wtedy, jeśli nowa wpisana w input wartość będzie inna niż obecna. !isNaN sprawdza czy newValue JEST liczbą,
@@ -410,6 +409,7 @@
 
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);  // --- 9.4 ---
     }
 
     initActions() {
@@ -422,7 +422,19 @@
     }
 
     add(menuProduct) {
-      // const thisCart = this;
+      const thisCart = this;
+
+      /* generate HTML based on template */
+      const generateHTML = templates.cartProduct(menuProduct);
+
+      /* create element using utils.createElementFromHTML (DOM)*/
+
+      const generatedHTML = utils.createDOMFromHTML(generateHTML);
+
+      /* finde menu container */
+
+      /* add element to menu */
+      thisCart.dom.productList.appendChild(generatedHTML);
 
       console.log('adding product', menuProduct);
     }
