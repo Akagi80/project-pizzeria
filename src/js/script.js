@@ -411,6 +411,11 @@
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
       thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);  // --- 9.4 ---
+
+      thisCart.dom.deliveryFee = element.querySelector(select.cart.deliveryFee);
+      thisCart.dom.subtotalPrice= element.querySelector(select.cart.subtotalPrice);
+      thisCart.dom.totalPrice = element.querySelector(select.cart.totalPrice);
+      thisCart.dom.totalNumber = element.querySelector(select.cart.totalNumber);
     }
 
     initActions() {
@@ -461,6 +466,11 @@
         thisCart.totalPrice = deliveryFee + subtotalPrice;
       }
       console.log('Wartości koszyka', deliveryFee, totalNumber, subtotalPrice, thisCart.totalPrice);
+
+      thisCart.dom.deliveryFee.innerHTML = deliveryFee; // kosz dostawy
+      thisCart.dom.subtotalPrice.innerHTML = subtotalPrice; // cena bez dostawy
+      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice; // cena z dostawą
+      thisCart.dom.totalNumber.innerHTML = totalNumber; // ilość produktów
     }
   }
 
