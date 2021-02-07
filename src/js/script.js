@@ -432,6 +432,20 @@
       thisCart.dom.productList.addEventListener('updated', function() {
         thisCart.update();
       });
+
+      thisCart.dom.productList.addEventListener('remove', function(event) {
+        thisCart.remove(event.detail.cartProduct);
+      });
+    }
+
+    remove(cartProduct) {
+      const thisCart = this;
+
+      const indexOfProduct = thisCart.products.indexOf(cartProduct);
+      console.log('indexOfProduct', indexOfProduct);
+      thisCart.products.splice(indexOfProduct, 1);
+      cartProduct.dom.wrapper.remove();
+      thisCart.update();
     }
 
     add(menuProduct) {
