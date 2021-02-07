@@ -174,13 +174,13 @@
 
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        console.log('param: ',paramId, param);
+        //console.log('param: ',paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log('option: ', optionId, option);
+          //console.log('option: ', optionId, option);
 
           // finde all images    ----   8.7
           //console.log('paramId, optionId: ', paramId, optionId);
@@ -318,7 +318,7 @@
             // option is selected!
             params[paramId].options[optionId] = option.label;
           }
-          console.log('optionSelected: ', optionSelected);
+          //console.log('optionSelected: ', optionSelected);
         }
       }
 
@@ -426,18 +426,50 @@
       const thisCart = this;
 
       /* generate HTML based on template */
-      const generateHTML = templates.cartProduct(menuProduct);
+      const generatedHTML = templates.cartProduct(menuProduct);
 
       /* create element using utils.createElementFromHTML (DOM)*/
 
-      const generatedHTML = utils.createDOMFromHTML(generateHTML);
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
 
       /* finde menu container */
 
       /* add element to menu */
-      thisCart.dom.productList.appendChild(generatedHTML);
+      thisCart.dom.productList.appendChild(generatedDOM);
 
       console.log('adding product', menuProduct);
+
+      thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
+      console.log('thisCart.products', thisCart.products);
+    }
+  }
+
+  // Dodajemy nową klasę do obsługi pojedyńczych produktów znajdujących się w koszyku --- 9.5 ---
+  class CartProduct {
+    constructor(menuProduct, element) {
+      const thisCartProduct = this;
+
+      thisCartProduct.id = menuProduct.id;
+      thisCartProduct.name = menuProduct.name;
+      thisCartProduct.amount = menuProduct.amount;
+      thisCartProduct.priceSingle = menuProduct.priceSingle;
+      thisCartProduct.price = menuProduct.price;
+      thisCartProduct.params = menuProduct.params;
+
+      thisCartProduct.getElements(element);
+      console.log('thisCartProduct', thisCartProduct);
+    }
+
+    getElements(element) {
+      const thisCartProduct = this;
+
+      thisCartProduct.dom = {};
+
+      thisCartProduct.dom.wrapper = element;
+      thisCartProduct.dom.amountWidget = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.amountWidget);
+      thisCartProduct.dom.price = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.price);
+      thisCartProduct.dom.edit = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.edit);
+      thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
     }
   }
 
