@@ -289,7 +289,7 @@
       productSummary.price = productSummary.amount * productSummary.priceSingle;
       productSummary.params = thisProduct.prepareCartProductParams();
 
-      console.log('productSummary.params: ', productSummary.params);
+      //console.log('productSummary.params: ', productSummary.params);
       return productSummary;
     }
 
@@ -400,7 +400,7 @@
       thisCart.getElements(element);
       thisCart.initActions();
 
-      console.log('new Card: ', thisCart);
+      //console.log('new Card: ', thisCart);
     }
 
     getElements(element) {
@@ -437,10 +437,10 @@
       /* add element to menu */
       thisCart.dom.productList.appendChild(generatedDOM);
 
-      console.log('adding product', menuProduct);
+      //console.log('adding product', menuProduct);
 
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-      console.log('thisCart.products', thisCart.products);
+      //console.log('thisCart.products', thisCart.products);
     }
   }
 
@@ -457,7 +457,8 @@
       thisCartProduct.params = menuProduct.params;
 
       thisCartProduct.getElements(element);
-      console.log('thisCartProduct', thisCartProduct);
+      thisCartProduct.initAmountWidget();
+      //console.log('thisCartProduct', thisCartProduct);
     }
 
     getElements(element) {
@@ -470,6 +471,18 @@
       thisCartProduct.dom.price = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.price);
       thisCartProduct.dom.edit = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.edit);
       thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
+    }
+
+    initAmountWidget() {
+      const thisCartProduct = this;
+
+      thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
+      thisCartProduct.dom.amountWidget.addEventListener('updated', function() {
+        thisCartProduct.amount = thisCartProduct.amountWidget.value;
+        thisCartProduct.price = thisCartProduct.amount * thisCartProduct.priceSingle;
+        thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
+      });
+
     }
   }
 
