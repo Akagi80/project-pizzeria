@@ -417,7 +417,7 @@
 
       thisCart.dom.deliveryFee = element.querySelector(select.cart.deliveryFee);
       thisCart.dom.subtotalPrice= element.querySelector(select.cart.subtotalPrice);
-      thisCart.dom.totalPrice = element.querySelector(select.cart.totalPrice);
+      thisCart.dom.totalPrice = element.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = element.querySelector(select.cart.totalNumber);
     }
 
@@ -490,7 +490,10 @@
 
       thisCart.dom.deliveryFee.innerHTML = deliveryFee; // kosz dostawy
       thisCart.dom.subtotalPrice.innerHTML = subtotalPrice; // cena bez dostawy
-      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice; // cena z dostawą
+      //thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice; // cena z dostawą
+      for(let price of thisCart.dom.totalPrice){
+        price.innerHTML = thisCart.totalPrice;
+      }
       thisCart.dom.totalNumber.innerHTML = totalNumber; // ilość produktów
     }
   }
