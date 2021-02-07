@@ -441,6 +441,26 @@
 
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
       //console.log('thisCart.products', thisCart.products);
+
+      thisCart.update();
+    }
+
+    update() {
+      const thisCart = this;
+
+      const deliveryFee = settings.cart.defaultDeliveryFee;
+      let totalNumber = 0;
+      let subtotalPrice = 0;
+
+      for(let product of thisCart.products) {
+        console.log('product',product, thisCart.porducts);
+        totalNumber = totalNumber + product.amount;
+        subtotalPrice = subtotalPrice + product.price;
+      }
+      if(subtotalPrice != 0) {
+        thisCart.totalPrice = deliveryFee + subtotalPrice;
+      }
+      console.log('Wartości koszyka', deliveryFee, totalNumber, subtotalPrice, thisCart.totalPrice);
     }
   }
 
