@@ -483,9 +483,13 @@
         totalNumber = totalNumber + product.amount;
         subtotalPrice = subtotalPrice + product.price;
       }
-      if(subtotalPrice != 0) {
+      if(totalNumber != 0) {
         thisCart.totalPrice = deliveryFee + subtotalPrice;
+      } else {
+        thisCart.totalPrice = 0;
+        thisCart.deliveryFee = 0;
       }
+
       console.log('Wartości koszyka', deliveryFee, totalNumber, subtotalPrice, thisCart.totalPrice);
 
       thisCart.dom.deliveryFee.innerHTML = deliveryFee; // kosz dostawy
