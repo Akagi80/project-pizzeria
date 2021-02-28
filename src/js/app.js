@@ -1,8 +1,69 @@
-import {settings, select} from '/js/settings.js';
+import {settings, select, classNames} from '/js/settings.js';
 import Product from '/js/components/Product.js';
 import Cart from '/js/components/Cart.js';
 
 const app = {
+  initPages: function () { // metogda która jest odpalana po odświeżeniu strony
+    const thisApp = this;
+
+    thisApp.pages = document.querySelector(select.containerOf.pages).children; // wszystkie dzieci kontenera stron (order i booking)
+    thisApp.navLinks = document.querySelectorAll(select.nav.links); // wszystkie linki prowadzące do pdstron
+
+    const idFromHash = window.location.hash.replace('#/', ''); // z hasha url strony uzyskujemy id strony która ma być otwarta jako domyślna
+
+    // pętla która sprawdza czy podstrona (adres) pacuje do id strony (idFromHash) jeżeli nie to zostaje otwarta pierwsza podstrona zapisana w zmiennej pageMathingHash!
+    let pageMathingHash = thisApp.pages[0].id;
+
+    for (let page of thisApp.pages) {
+      if(page.id == idFromHash) {
+        pageMathingHash = page.id;
+        break;
+      }
+    }
+
+    //console.log('pageMathingHash', pageMathingHash);
+    thisApp.activatePage(pageMathingHash); // aktywujemy odpowiednia podstronę
+
+
+    for(let link of thisApp.navLinks) {
+      link.addEventListener('click', function(event) {
+        const clickedElement = this;
+        event.preventDefault();
+
+        /* get page id from href attribute */
+        const id = clickedElement.getAttribute('href').replace('#', ''); // zapisujemy do słaej "id" artubyt "href" kliknietego elementu w którym zamieniamy znak # na pusty znak np "#order" na "order"
+
+        /* run thisApp.activatePage with that id */
+        thisApp.activatePage(id); // aktywujemy odpowiednia (id) podstronę
+
+        /* change URL hash */
+        window.location.hash = '#/' + id; // dodaliśly slash po hash '#/' aby domyślnie strona się nie przewijała do elementu #order
+      });
+    }
+  },
+
+  activatePage: function(pageId) { // UWAGA pageId to order lub booking!!!
+    const thisApp = this;
+
+    /* add calss "active" to matching pages, remove from non-mathing */
+    for(let page of thisApp.pages) {
+    //  if(page.id == pageId) {
+    //    page.classList.add(classNames.pages.active);
+    //  } else {
+    //    page.classList.remove(classNames.pages.active);
+    //  }
+      page.classList.toggle(classNames.pages.active, page.id == pageId); // UPROSZCZENIE zakomendowanej powyżej poętli:  toogle to przełącznik klass (dodaje jednej podstronie i odbiera drugiej)
+    }
+
+    /* add calss "active" to matching links, remove from non-mathing */
+    for(let link of thisApp.navLinks) { // dla każdego z linków (link) zapisanych w thisApp.navLinks...
+      link.classList.toggle( // dodajemy lub usuwamy...
+        classNames.nav.active, // klasę zdefiniowaną w classNames.nav.active..
+        link.getAttribute('href') == '#' + pageId //w zależności od tego czy atrubut 'href' tego linka jest równy #pageId (argument metody: activatePage: function(pageId))
+      );
+    }
+  },
+
   initMenu: function() { // metoda app.initMenu przejdzie po każdym produkcie z osobna (np. cake czy breakfast) i stworzy dla niego instancję Product, czego wynikiem będzie również utworzenie na stronie reprezentacji HTML każdego z produktów w thisApp.data.products.
     const thisApp = this;
 
@@ -45,6 +106,8 @@ const app = {
     // console.log('classNames:', classNames);
     // console.log('settings:', settings);
     // console.log('templates:', templates);
+
+    thisApp.initPages();
 
     thisApp.initData();
     // thisApp.initMenu(); --- zmiana w 9.8 ---
