@@ -20,7 +20,6 @@ class BaseWidget {
 
     const newValue = thisWidget.parseValue(value); // presentInt(value) konwertuje liczkę zapisaną jako tekst (input tak ZAWSZE zapisuje) np '8' na właściwie zapisaną 8
 
-    
     if(thisWidget.correctValue !== newValue && thisWidget.isValid(newValue)) { //thisWidget.correctValue zmieni się tylko wtedy, jeśli nowa wpisana w input wartość będzie inna niż obecna.
 
       thisWidget.correctValue = newValue;
@@ -41,7 +40,7 @@ class BaseWidget {
   }
 
   isValid(value) {
-    return !isNaN(value) // !isNaN sprawdza czy newValue JEST liczbą,
+    return !isNaN(value); // !isNaN sprawdza czy newValue JEST liczbą,
   }
 
   renderValue() {
