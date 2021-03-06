@@ -1,4 +1,4 @@
-import {templates, select, settings} from '/js/settings.js';
+import {templates, select, settings, classNames} from '/js/settings.js';
 import utils from '/js/utils.js';
 import AmountWidget from '/js/components/AmountWidget.js';
 import DatePicker from '/js/components/DatePicker.js';
@@ -64,12 +64,96 @@ class Booking {
         ]);
       })
       .then(function([bookings, eventsCurrent, eventsRepeat]) {
-        console.log(bookings);
-        console.log(eventsCurrent);
-        console.log(eventsRepeat);
+        // console.log(bookings);
+        // console.log(eventsCurrent);
+        // console.log(eventsRepeat);
+        thisBooking.parseData(bookings, eventsCurrent, eventsRepeat);
       });
-
   }
+
+  parseData(bookings, eventsCurrent, eventsRepeat) {
+    const thisBooking = this;
+
+    thisBooking.booked = {};
+
+    for(let item of bookings) {
+      thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
+    }
+
+    for(let item of eventsCurrent) {
+      thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
+    }
+
+    const minDate = thisBooking.datePicker.minDate;
+    const maxDate = thisBooking.datePicker.maxDate;
+
+    // Pętla sprawdzająca zajętość stolika przez wydarzenia cykliczne
+    for(let item of eventsRepeat) {
+      if(item.repeat == 'daily') {
+        for(let loopDate = minDate; loopDate <= maxDate; loopDate = utils.addDays(loopDate, 1)) {
+          thisBooking.makeBooked(utils.dateToStr(loopDate), item.hour, item.duration, item.table);
+        }
+      }
+    }
+    // console.log('thisBooking.booked', thisBooking.booked);
+
+    thisBooking.updateDOM();
+  }
+
+  makeBooked(date, hour, duration, table) {
+    const thisBooking = this;
+
+    if(typeof thisBooking.booked[date] == 'undefined') {
+      thisBooking.booked[date] = {};
+    }
+
+    const startHour = utils.hourToNumber(hour);
+
+    // pętla sprawdzająca jak długo zajęty jest stolik
+    for(let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5) {
+      // console.log('loop', hourBlock);
+
+      if(typeof thisBooking.booked[date][hourBlock] == 'undefined') {
+        thisBooking.booked[date][hourBlock] = [];
+      }
+
+      thisBooking.booked[date][hourBlock].push(table);
+    }
+  }
+
+  updateDOM() {
+    const thisBooking = this;
+
+    thisBooking.date = thisBooking.datePicker.value;
+    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
+
+    let allAvailable = false;
+
+    if(
+      typeof thisBooking.booked[thisBooking.date] == 'undefined'
+      ||
+      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] == 'undefined'
+    ){
+      allAvailable = true;
+    }
+
+    for(let table of thisBooking.dom.tables) {
+      let tableId = table.getAttribute(settings.booking.tableIdAttribute);
+      if(!isNaN(tableId)) {
+        tableId = parseInt(tableId);
+      }
+
+      if(!allAvailable
+        &&
+        thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)
+      ){
+        table.classList.add(classNames.booking.tableBooked);
+      } else {
+        table.classList.remove(classNames.booking.tableBooked);
+      }
+    }
+  }
+
 
   render(element) {
     const thisBooking = this;
@@ -79,12 +163,11 @@ class Booking {
 
     thisBooking.dom.wrapper = element; // do obiektu thisBooking.dom dodajemy właściwość 'wrapper' i przypisujemy do niej referencję do kontenera z argumentu metody (element)
     thisBooking.dom.wrapper.innerHTML = generatedHTML; // zmieniamy wartość wrappera innerHTML na kod HTML wygenerowany z szablonu generatedHTML
-    thisBooking.dom.peopleAmount = document.querySelector(select.booking.peopleAmount); // dostęp do inputu peopleAmount
-    thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount); // dostęp do inputu hoursAmount
-    thisBooking.dom.datePicker = document.querySelector(select.widgets.datePicker.wrapper);
-    thisBooking.dom.hourPicker = document.querySelector(select.widgets.hourPicker.wrapper);
-    // console.log(thisBooking.dom.datePicker);
-    // console.log(thisBooking.dom.hourPicker);
+    thisBooking.dom.peopleAmount = element.querySelector(select.booking.peopleAmount); // dostęp do inputu peopleAmount
+    thisBooking.dom.hoursAmount = element.querySelector(select.booking.hoursAmount); // dostęp do inputu hoursAmount
+    thisBooking.dom.datePicker = element.querySelector(select.widgets.datePicker.wrapper);
+    thisBooking.dom.hourPicker = element.querySelector(select.widgets.hourPicker.wrapper);
+    thisBooking.dom.tables = element.querySelectorAll(select.booking.tables);
   }
 
   initWidgets() {
@@ -110,6 +193,11 @@ class Booking {
     thisBooking.dom.hourPicker.addEventListener('update', function() {
 
     });
+
+    thisBooking.dom.wrapper.addEventListener('updated', function() {
+      thisBooking.updateDOM();
+    });
+
   }
 }
 
