@@ -159,7 +159,6 @@ class Booking {
     }
   }
 
-
   render(element) {
     const thisBooking = this;
     const generatedHTML = templates.bookingWidget(); // generujemy HTML z szablonu templates.bookingWidget
@@ -174,6 +173,10 @@ class Booking {
     thisBooking.dom.hourPicker = element.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = element.querySelectorAll(select.booking.tables);
     thisBooking.dom.allTables = element.querySelector(select.booking.allTables); // 11.3.3
+    thisBooking.dom.form = element.querySelector(select.booking.form);
+    thisBooking.dom.phone = element.querySelector(select.booking.phone);
+    thisBooking.dom.address = element.querySelector(select.booking.address);
+    thisBooking.dom.starters = document.querySelectorAll(select.booking.starters);
   }
 
   initWidgets() {
@@ -207,6 +210,11 @@ class Booking {
     thisBooking.dom.allTables.addEventListener('click', function() { // 11.3.4
       thisBooking.initTables();
     });
+
+    thisBooking.dom.form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      thisBooking.sendBooking();
+    });
   }
 
   initTables() { // 11.3.5
@@ -237,6 +245,38 @@ class Booking {
     if(!clickedElement.classList.contains(classNames.booking.tableSelected)) {
       thisBooking.resTable = null;
     }
+  }
+
+  sendBooking() {
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.booking;
+
+    const reservation = {
+      date: thisBooking.datePicker.value,
+      hour: thisBooking.hourPicker.value,
+      table: parseInt(thisBooking.resTable),
+      duration: parseInt(thisBooking.hoursAmount.value),
+      ppl: parseInt(thisBooking.peopleAmount.value),
+      starters: [],
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
+    };
+
+    for(let starter of thisBooking.dom.starters) {
+      if(starter.checked == true) {
+        reservation.starters.push(starter.value);
+      }
+    }
+    console.log('reservation: ', reservation);
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reservation),
+    };
+
+    fetch(url, options);
   }
 }
 
