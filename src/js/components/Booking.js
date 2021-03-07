@@ -144,6 +144,10 @@ class Booking {
         tableId = parseInt(tableId);
       }
 
+      // usuwamy oznaczenie stolika po zmianie godziny, liczby osób etc. 11.3.6...
+      table.classList.remove(classNames.booking.tableSelected);
+      thisBooking.resTable = null;
+
       if(!allAvailable
         &&
         thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)
