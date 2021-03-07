@@ -175,6 +175,11 @@
     }
   }
 
+  .selected {
+    border: solid 2px green;
+    background-color: green;
+  }
+
   [data-table="1"] {
     left: 40px;
     top: 40px;

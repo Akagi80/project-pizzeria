@@ -11,6 +11,7 @@ class Booking {
     thisBooking.render(element); // wywołujemy metodę render z dostępem do kontenera (element)
     thisBooking.initWidgets(); // wywołujemy metodę initWidgets
     thisBooking.getData(); // wywołujemy metodę określania daty rezerwacji
+    thisBooking.resTable = null; // 11.3.2
   }
 
   getData() {
@@ -168,6 +169,7 @@ class Booking {
     thisBooking.dom.datePicker = element.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = element.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = element.querySelectorAll(select.booking.tables);
+    thisBooking.dom.allTables = element.querySelector(select.booking.allTables); // 11.3.3
   }
 
   initWidgets() {
@@ -198,6 +200,39 @@ class Booking {
       thisBooking.updateDOM();
     });
 
+    thisBooking.dom.allTables.addEventListener('click', function() { // 11.3.4
+      thisBooking.initTables();
+    });
+  }
+
+  initTables() { // 11.3.5
+    const thisBooking = this;
+
+    const clickedElement = event.target;
+    const tableId = clickedElement.getAttribute('data-table');
+
+    // sprawdzamy czy stolik jest już zajęty
+    if(!clickedElement.classList.contains(classNames.booking.tableBooked)) {
+      thisBooking.resTable = tableId;
+      console.log(thisBooking.resTable);
+    } else {
+      alert('Niestety, stolik jest już zajęty');
+    }
+
+    // Przypisanie klasy selected do zaznaczonego stolika 11.3.5 / 11.3.6
+    for(let table of thisBooking.dom.tables) {
+      table.classList.remove(classNames.booking.tableSelected);
+      if (clickedElement.classList.contains('table') && thisBooking.resTable == tableId) {
+        clickedElement.classList.add(classNames.booking.tableSelected);
+        thisBooking.resTable = tableId;
+      } else {
+        thisBooking.resTable = null;
+        clickedElement.classList.remove(classNames.booking.tableSelected);
+      }
+    }
+    if(!clickedElement.classList.contains(classNames.booking.tableSelected)) {
+      thisBooking.resTable = null;
+    }
   }
 }
 
