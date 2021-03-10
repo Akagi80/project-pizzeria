@@ -10,6 +10,7 @@ class AmountWidget extends BaseWidget {
     thisWidget.getElements(element);
 
     thisWidget.initActions();
+    thisWidget.renderValue();
     // thisWidget.setValue(thisWidget.input.value); usunięty w 11.1 !!!
 
     //console.log('AmountWigdet: ', thisWidget);
