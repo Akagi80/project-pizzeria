@@ -10,9 +10,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  text-align: center;
-  align-items: center;
-  width: 600px;
 
   .box {
     width: 49%;
@@ -25,6 +22,9 @@
     justify-content: center;
     background-size: cover;
     border-radius: 5px;
+    color: $color-light;
+    cursor: pointer;
+    transition: 0.25s;
 
     h3 {
       font-family: $font-header;
@@ -50,19 +50,15 @@
 
   .home-order {
     background-image: url(../../images/home/pizza-1.jpg);
-    color: $color-light;
-    cursor: pointer;
   }
 
   .home-booking {
     background-image: url(../../images/home/pizza-2.jpg);
-    color: $color-light;
-    cursor: pointer;
   }
 }
 
 .home-open-hours {
-  width: 605px;
+  width: 600px;
   height: 128px;
   background-color: $color-main;
   color: $color-light;
@@ -89,7 +85,7 @@
 /* carousel */
 
 .main-carousel {
-  margin-top: 100px;
+  margin: 75px 0;
 }
 
 .carousel-cell {
@@ -121,66 +117,67 @@
 
 /* gallery */
 
-.gallery {
-  margin-top: 100px;
-  width: 600px;
-  height: 400px;
-}
-
 .gallery-row {
-  margin: 0 0 5px 0;
-  width: 600px;
-  height: 200px;
+  margin-top: 5px;
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-around;
+  width: 100%;
+  height: 150px;
+  justify-content: space-between;
 }
 
-.gallery-img {
-  position: relative;
-  margin: 0;
-  padding: 0;
-
-  img {
-    width: 190px;
-    height: 190px;
-    margin: 2px;
-    border-radius: 5px;
-  }
-}
-
-.gallery-overlay {
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  background-color: rgba(1,1,1,0.3);
-  //visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 2px;
+.gallery-box {
+  width: 33%;
   border-radius: 5px;
+  transition: 1s;
+  background-size: cover;
 }
 
-.sign {
-  margin: 5px;
-  font-size: 25px;
-}
-
-.sign:hover {
-  color: $color-main;
-  font-size: 30px;
+.gallery-box:hover > .overlay {
+  display: inline-block;
   cursor: pointer;
+  font-size: 15px;
 }
 
-.gallery-button {
-  color: $color-light;
-  font-family: $font-text;
+.img-1 {
+  background-image: url('../../images/home/pizza-4.jpg');
 }
 
-.gallery-img:hover {
-  .gallery-layer {
-    visibility: visible;
+.img-2 {
+  background-image: url('../../images/home/pizza-5.jpg');
+}
+
+.img-3 {
+  background-image: url('../../images/home/pizza-6.jpg');
+}
+
+.img-4 {
+  background-image: url('../../images/home/pizza-7.jpg');
+}
+
+.img-5 {
+  background-image: url('../../images/home/pizza-8.jpg');
+}
+
+.img-6 {
+  background-image: url('../../images/home/pizza-9.jpg');
+}
+
+.overlay {
+  padding-top: 70px;
+  display: none;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.300);
+  border-radius: 5px;
+
+  i {
+    color: $color-light;
+    font-size: 23px;
+    transition: 0.5s;
+  }
+
+  i:hover {
+    color: $color-main;
   }
 }

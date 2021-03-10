@@ -4,7 +4,7 @@ import Cart from '/js/components/Cart.js';
 import Booking from '/js/components/Booking.js';
 import Home from '/js/components/Home.js';
 
-const app = {
+export const app = {
   initPages: function () { // metogda która jest odpalana po odświeżeniu strony
     const thisApp = this;
 

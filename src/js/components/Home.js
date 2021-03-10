@@ -1,4 +1,6 @@
 import {templates, select} from '/js/settings.js';
+import {app} from '/js/app.js';
+
 
 class Home {
   constructor(element) {
@@ -6,6 +8,7 @@ class Home {
 
     thisHome.render(element);
     thisHome.initCarousel();
+    thisHome.initAction();
   }
 
   render(element) {
@@ -34,11 +37,16 @@ class Home {
   initAction() {
     const thisHome = this;
     thisHome.dom.order.addEventListener('click', function() {
+      app.activatePage('order');
+      window.location.hash = '#/order';
+    
       console.log('clicked order');
     });
 
     thisHome.dom.booking.addEventListener('click', function() {
+      app.activatePage('booking');
       console.log('clicked booking');
+      window.location.hash = '#/booking';
     });
   }
 }
